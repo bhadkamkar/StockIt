@@ -1,0 +1,30 @@
+body {
+    padding: 0px;
+    margin: 0px;
+}
+
+.container {
+    width: 900px;
+    margin: 0 auto;
+}
+
+.header {
+    background-color: cornflowerblue;
+    overflow: hidden;
+    padding-top: 20px;
+}
+
+.header p {
+    font-size: 36px;
+    font-family: Helvetica;
+}
+
+.login-form {
+    position: absolute;
+    padding-top: 10px;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
