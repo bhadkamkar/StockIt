@@ -29,6 +29,11 @@ body {
     flex-wrap: wrap;
 }
 
+.welcome {
+    font-family: "Open Sans";
+    font-size: 30px;
+}
+
 #company-details{
     margin-top: 30px;
 }
