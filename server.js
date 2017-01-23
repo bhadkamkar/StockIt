@@ -23,16 +23,6 @@ var connection = mysql.createConnection({
 });
 
 connection.connect();
-connection.query('SELECT * from users',
-                function(err, rows, fields){
-                    if(!err){
-                        console.log(rows);
-                    }
-                    else{
-                        console.log("error!!!!!!");
-                    }
-    
-});
 
 
 app.get('/',function(req,res){
@@ -47,10 +37,27 @@ app.get('/',function(req,res){
 });
 
 app.post('/login',function(req,res){
-    console.log(req);
-    sess = req.session;
-    sess.email = req.body.email;
-    res.end('done');
+    var username = req.body.username;
+    var password = req.body.password;
+    var query = 'SELECT COUNT(*) as rowsCount from users where username = ' + username + 'and password = ' + password;
+    connection.query(query,
+            function(err, rows, fields){
+                if(!err){
+                    if(rows[0].rowsCount == 1){
+                        sess = req.session;
+                        sess.username = username;
+                        res.redirect('/dashboard');    
+                    }
+                    else{
+                        res.redirect('/')
+                    }
+                }
+                else{
+                    console.log("error!!!!!!");
+                }
+    
+    });
+    
 });
 
 app.get('/dashboard', function(req,res){
