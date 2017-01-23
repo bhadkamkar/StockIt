@@ -102,10 +102,30 @@ app.get('/logout',function(req,res){
     });
 });
 
+app.get('/getholdings', function (req, res) {
+    sess = req.session;
+    if(sess.username) {
+        var holdingsQuery = "select * from stocksheld where username = '" + sess.username + "'";
+        connection.query(holdingsQuery,
+            function(err,query_res){
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    console.log(query_res);
+                    res.writeHead(200, {
+                        'Content-Type' : 'x-application/json'
+                    });
+                    res.end(JSON.stringify(query_res));
+                }
+            });
+    }
+})
+
 app.get('*.css|*.js', function(req, res) {
     var filename = req.url.replace(/^.*[\\\/]/, '')
     res.sendFile(__dirname + '/views/' + filename);
-})
+});
 
 app.listen(4000,function(){
     console.log('started on port 4000');

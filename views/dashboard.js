@@ -1,5 +1,36 @@
 $(document).ready(function () {
             var code;
+
+            /* Get current stock holdings */
+            $.ajax({
+                url: '/getholdings',
+                method: 'get',
+                success: function (data) {
+                    // console.log(data);/
+                    for(var i = 0; i < data.length; i++) {
+                        var stockPrice;
+                        $.ajax({
+                            url: "http://dev.markitondemand.com/MODApis/Api/v2/Quote/jsonp?symbol=" + data[i].symbol + "&callback=renderTableRow",
+                            method: "post",
+                            async: false,
+                            dataType: 'jsonp',
+                            success: function(stockData) {
+                                stockPrice = stockData.LastPrice;
+                            }
+                        });
+                        var tableRow = '<tr>' +
+                            '<td>' + data[i].company_name + '</td><td>' + data[i].count + '</td><td>' + data[i].spent +
+                            '</td><td>' + stockPrice + '</td><td>' + data[i].spent - (stockPrice *
+                            data[i].count) + '</td></tr>';
+                        $('#stock-holdings-table tr:last').after(tableRow);
+                    }
+                }
+            });
+
+
+            function renderTableRow(stockData) {
+
+            }
             $("#searchinput").autocomplete({
             source: function (request, response) {
                 $.ajax({

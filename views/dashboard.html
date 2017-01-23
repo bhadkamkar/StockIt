@@ -32,8 +32,12 @@
         <span class="pull-right welcome">Available Balance: $ {{balance}}</span>
     </div>
 
-    <div class="col-md-12">
-        <table class="table-striped">
+    <div id="no-holdings" style="margin-top: 30px;">
+        <p style="font-size: 24px;">No Stock Holdings found.</p>
+    </div>
+
+    <div class="col-md-12" id="stock-holdings">
+        <table class="table-striped" id="stock-holdings-table" style="margin-top: 30px; width: 100%;">
             <tr>
                 <th>Company Name</th>
                 <th># of Stocks</th>
