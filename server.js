@@ -27,7 +27,7 @@ connection.connect();
 
 app.get('/',function(req,res){
     sess = req.session;
-    if(sess.email){
+    if(sess.username){
         res.redirect('/dashboard');
     }
     else{
@@ -39,7 +39,8 @@ app.get('/',function(req,res){
 app.post('/login',function(req,res){
     var username = req.body.username;
     var password = req.body.password;
-    var query = 'SELECT COUNT(*) as rowsCount from users where username = ' + username + 'and password = ' + password;
+    var query = 'SELECT COUNT(*) as rowsCount from users where username = "' + username + '" and password = "' + password + '"';
+    
     connection.query(query,
             function(err, rows, fields){
                 if(!err){
@@ -53,16 +54,35 @@ app.post('/login',function(req,res){
                     }
                 }
                 else{
-                    console.log("error!!!!!!");
+                    console.log(err);
                 }
     
     });
     
 });
 
+app.post('/signup',function(req,res){
+    var username = req.body.username;
+    var password = req.body.password;
+    var email = req.body.email;
+    var query = 'INSERT into users values("' +username + '","' + password + '","' + email +'")';
+    connection.query(query,
+                    function(err,query_res){
+        if(err){
+            console.log(err);
+        }
+        else{
+            sess = req.session;
+            sess.username = username;
+            res.redirect('/dashboard');    
+        }    
+    });
+    
+});
+
 app.get('/dashboard', function(req,res){
     sess = req.session;
-    if(sess.email){
+    if(sess.username){
         res.render('dashboard.html');
         
     }
