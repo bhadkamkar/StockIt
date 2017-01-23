@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="style-dash.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans"/>
 </head>
 <body>
 <div class="header">
@@ -22,6 +23,25 @@
                 <button id="searchbutton" class="btn btn-default" type="button">Search</button>
             </span>
         </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="col-md-12" style="padding-top: 30px;">
+        <span class="welcome">Welcome {{username}}!</span>
+        <span class="pull-right welcome">Available Balance: $ {{balance}}</span>
+    </div>
+
+    <div class="col-md-12">
+        <table class="table-striped">
+            <tr>
+                <th>Company Name</th>
+                <th># of Stocks</th>
+                <th>Amount Spent</th>
+                <th>Current Rate</th>
+                <th>Profit/Loss</th>
+            </tr>
+        </table>
     </div>
 </div>
 
