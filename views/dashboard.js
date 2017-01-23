@@ -1,4 +1,5 @@
 $(document).ready(function () {
+            var code;
             $("#searchinput").autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -10,7 +11,7 @@ $(document).ready(function () {
                        var parsedJSON = data;
                        var arr = [];
                        for (var i=0;i<parsedJSON.length;i++) {
-                           arr.push(parsedJSON[i]["Name"]);
+                           arr.push(parsedJSON[i]["Name"] + " (" + parsedJSON[i]["Symbol"] + ")");
                        }
                         response(arr);
                     }
@@ -18,7 +19,8 @@ $(document).ready(function () {
             },
             minLength: 1,
             select: function (event, ui) {
-                var str1 = ui.item.label;
+                var re = /\(([^)]+)\)/;
+                code = re.exec(ui.item.label)[1];
             },
             open: function () {
                 $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
@@ -26,5 +28,20 @@ $(document).ready(function () {
             close: function () {
                 $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
             }
-            });    
+            });
+            
+            $("#searchbutton").click(function(){
+                if (typeof code !== undefined){
+                    $.ajax({
+                        url: "http://dev.markitondemand.com/MODApis/Api/v2/Quote/jsonp?symbol=" + code,
+                        method: "post",
+                        dataType: 'jsonp',
+                        success: function(data) {
+                            $("#companyName").html(data.Name);
+                        }
+                        
+                    });
+                }
+            });
     });
+

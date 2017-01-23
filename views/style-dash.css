@@ -28,3 +28,18 @@ body {
     display: flex;
     flex-wrap: wrap;
 }
+
+#company-details{
+    margin-top: 30px;
+}
+
+#company-details-table.table-striped tr th {
+    width: 50%;
+    margin-top: 20px;
+}
+
+.table-striped tr th, tr td {
+    padding-left: 10px;
+    line-height: 40px;
+    border-top: 1px solid #e3e3e3;
+}
