@@ -28,3 +28,7 @@ body {
     display: flex;
     flex-wrap: wrap;
 }
+
+.required-red {
+    color: red;
+}
