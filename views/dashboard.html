@@ -29,7 +29,7 @@
 <div class="container">
     <div class="col-md-12" style="padding-top: 30px;">
         <span class="welcome">Welcome {{username}}!</span>
-        <span class="pull-right welcome">Available Balance: $ {{balance}}</span>
+        <span class="pull-right welcome">Available Balance: $ <span id="balance">{{balance}}</span></span>
     </div>
 
     <div id="no-holdings" style="margin-top: 30px;">
@@ -108,6 +108,8 @@
                 <div style="padding-top: 10px; text-align: center;">
                     <button id="buybutton" class="btn btn-success" type="button">Buy</button>
                     <button id="sellbutton" class="btn btn-danger" type="button">Sell</button>
+                    <span id="success-msg" style="display: none; color: green">Success</span>
+                    <span id="failure-msg" style="display: none; color: red"></span>
                 </div>
             </form>
         </div>

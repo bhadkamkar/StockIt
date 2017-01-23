@@ -8,7 +8,7 @@ $(document).ready(function () {
         success: function (data) {
             // console.log(data);/
             // window.company_data = data;
-            if(data.length > 0) {
+            if (data.length > 0) {
                 $("#stock-holdings").show();
                 $("#no-holdings").hide();
             }
@@ -72,6 +72,8 @@ $(document).ready(function () {
     });
 
     $("#searchbutton").click(function () {
+        $("#stock-holdings").hide();
+        $("#company-search").show();
         if (typeof code !== undefined) {
             $.ajax({
                 url: "http://dev.markitondemand.com/MODApis/Api/v2/Quote/jsonp?symbol=" + code,
@@ -90,10 +92,43 @@ $(document).ready(function () {
                     $("#companyLowPrice").html(data.Low);
                     $("#companyOpenPrice").html(data.Open);
 
+                    window.selectedCompany = {rate: data.LastPrice, symbol: data.Symbol, name: data.Name}
                 }
 
             });
         }
     });
+
+    $("#buybutton").click(function () {
+        var numberShares = $("#buysellinput").val();
+        if (numberShares != undefined) {
+            numberShares = parseInt(numberShares);
+            $.ajax({
+                url: "/buy",
+                method: "post",
+                data: {
+                    shares: numberShares,
+                    rate: window.selectedCompany.rate,
+                    companySymbol: window.selectedCompany.symbol,
+                    companyName: window.selectedCompany.name
+                },
+                success: function (data) {
+                    if(data.success) {
+                        $("#balance").html(data.balance);
+                        $("#success-msg").show();
+                        setTimeout(function () {
+                            $("#success-msg").hide();
+                        }, 5000);
+                    } else {
+                        $("#failure-msg").html(data.message);
+                        $("#failure-msg").show();
+                        setTimeout(function () {
+                            $("#failure-msg").hide();
+                        }, 5000);
+                    }
+                }
+            })
+        }
+    })
 });
 
