@@ -2,6 +2,7 @@ var express = require('express');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var app = express();
+var fs = require('fs');
 
 app.set('views', __dirname + '/views');
 app.engine('html', require('ejs').renderFile);
@@ -67,9 +68,22 @@ app.post('/signup', function (req, res) {
 app.get('/dashboard', function (req, res) {
     sess = req.session;
     if (sess.username) {
-        res.render('dashboard.html');
+        var getBalanceQuery = "SELECT balance from users WHERE username = '" + sess.username + "'";
+        connection.query(getBalanceQuery, function (err, query_res) {
+            if (err) {
+                console.log(err);
+            } else {
+                var template = fs.readFileSync('views/dashboard.html');
+                template = template.toString();
+                template = template.replace("{{username}}", sess.username);
+                template = template.replace("{{balance}}", query_res[0].balance);
+                res.write(template);
+                res.end()
+            }
+        });
+
     } else {
-        res.end('login first');
+        res.redirect('/');
     }
 });
 
@@ -141,6 +155,6 @@ app.get('*.css|*.js', function (req, res) {
     res.sendFile(__dirname + '/views/' + filename);
 });
 
-app.listen(4001, function () {
+app.listen(4000, function () {
     console.log('started on port 4000');
 });
