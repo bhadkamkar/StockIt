@@ -43,3 +43,14 @@ body {
     line-height: 40px;
     border-top: 1px solid #e3e3e3;
 }
+
+.col-md-6 h1{
+    text-align: center;
+    font-size: 24px;
+    font-family: Helvetica;
+}
+
+.buy-sell-form{
+    margin: 0 auto;
+    width:250px;
+}
