@@ -14,11 +14,11 @@
             <p>StockIt</p>
         </div>
         <div class="col-md-6">
-            <span class="login-form">
-                <input type="text" id="username" placeholder="Username">
-                <input type="password" id="password" placeholder="Password">
+            <form class="login-form" method="post" action="/login">
+                <input type="text" id="username" placeholder="Username" name="username">
+                <input type="password" id="password" placeholder="Password" name="password">
                 <button class="btn btn-default" type="submit">Login</button>
-            </span>
+            </form>
         </div>
     </div>
 </div>
