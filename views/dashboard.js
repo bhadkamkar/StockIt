@@ -69,6 +69,17 @@ $(document).ready(function () {
                         dataType: 'jsonp',
                         success: function(data) {
                             $("#companyName").html(data.Name);
+                            $("#companySymbol").html(data.Symbol);
+                            $("#companyLastPrice").html(data.LastPrice);
+                            $("#companyChange").html(data.Change);
+                            $("#companyDateTime").html(data.Timestamp);
+                            $("#companyMarketCap").html(data.MarketCap);
+                            $("#companyVolume").html(data.Volume);
+                            $("#companyChangeYTD").html(data.ChangeYTD);
+                            $("#companyHighPrice").html(data.High);
+                            $("#companyLowPrice").html(data.Low);
+                            $("#companyOpenPrice").html(data.Open);
+                            
                         }
                         
                     });
