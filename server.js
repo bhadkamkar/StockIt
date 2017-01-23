@@ -104,7 +104,7 @@ app.get('/getholdings', function (req, res) {
     }
 });
 
-
+/*
 app.post('/buy', function (req, res) {
     //sess = req.session;
     var username1 = "sid", symbol = "AAPL", rate = 60, count = 2, companyName = "Apple Inc.";
@@ -134,6 +134,57 @@ app.post('/buy', function (req, res) {
                 console.log(err);
             }
         });
+    }
+});
+*/
+
+app.post('/buy',function(req,res){
+    sess = req.session;
+    if(sess.username){
+        var username = sess.username;
+        var symbol = sess.body.symbol;
+        var rate = sess.body.rate;
+        var count = sess.body.count;
+        var balance;
+        var jsonResponse;
+        queryGetBalance = 'SELECT balance from users where username = "' + username + '"';
+        connection.query(queryGetBalance,
+                        function(err,rows,fields){
+                            if(!err){
+                                balance = rows[0].balance;
+                                if(balance < rate*count){
+                                    jsonResponse = {
+                                        "success":false,
+                                        "message":"insufficientBalance"
+                                    };
+                                }
+                                else{
+                                    jsonResponse = {
+                                        "success":true,
+                                    };
+                                    queryUpdateBalance = 'UPDATE users SET balance = balance - ' + (rate*count) + 'where username = "' + username + '"';
+                                    queryInsertOrUpdateStockheld = 'INSERT into stockheld values ("' + username + '"' + ',"' + symbol + '",' + count + ',' + (rate*count) + ')';
+                                    connection.query(queryUpdateBalance,function(err,query_res){
+                                        if(err){
+                                            console.log(err);
+                                        }
+                                    });
+                                    connection.query(queryInsertOrUpdateStockheld,function(err,query_res){
+                                        if(err){
+                                            console.log(err);
+                                        }
+                                    });
+                                }
+                                res.jsonp(jsonResponse);
+                            }
+                            else{
+                                console.log(err);
+                            }
+            
+        });
+    }
+    else{
+        console.log('No username')
     }
 });
 
