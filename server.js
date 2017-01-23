@@ -94,7 +94,6 @@ app.get('/getholdings', function (req, res) {
                     console.log(err);
                 }
                 else{
-                    console.log(query_res);
                     res.writeHead(200, {
                         'Content-Type' : 'x-application/json'
                     });
