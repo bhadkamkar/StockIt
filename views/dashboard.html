@@ -15,7 +15,7 @@
 <div class="header">
     <div class="container">
         <div class="col-md-6">
-            <p>StockIt</p>
+            <p id="gotodashboard" style="cursor: pointer">StockIt</p>
         </div>
         <div class="col-md-6">
             <span class="login-form">
@@ -102,12 +102,14 @@
         <div class="col-md-6">
             <h1>Buy or Sell Stock</h1>
             <form class="form-group buy-sell-form">
-                <div>
+                <div class="col-md-7">
                     <input type="text" id="buysellinput" class="form-control" placeholder="Number of stocks to buy/sell">
                 </div>
-                <div style="padding-top: 10px; text-align: center;">
+                <div class="col-md-5">
                     <button id="buybutton" class="btn btn-success" type="button">Buy</button>
                     <button id="sellbutton" class="btn btn-danger" type="button">Sell</button>
+                </div>
+                <div>
                     <span id="success-msg" style="display: none; color: green">Success</span>
                     <span id="failure-msg" style="display: none; color: red"></span>
                 </div>

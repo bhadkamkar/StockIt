@@ -23,17 +23,18 @@ $(document).ready(function () {
     });
 
     function getCompanyDetails(data) {
+        window.company_data = data;
         window.index = 0;
-        for (var i = 0; i < data.length; i++) {
+        for (var i = 0; i < window.company_data.length; i++) {
             $.ajax({
-                url: "http://dev.markitondemand.com/MODApis/Api/v2/Quote/jsonp?symbol=" + data[i].symbol,
+                url: "http://dev.markitondemand.com/MODApis/Api/v2/Quote/jsonp?symbol=" + window.company_data[window.index].symbol,
                 method: "post",
                 async: false,
                 dataType: 'jsonp',
                 success: function (stockData) {
                     $("#rate-" + stockData.Symbol).html(stockData.LastPrice);
-                    $("#profit-" + stockData.Symbol).html(data[window.index].spent - (stockData.LastPrice *
-                        data[window.index].count));
+                    $("#profit-" + stockData.Symbol).html(window.company_data[window.index].spent - (stockData.LastPrice *
+                        window.company_data[window.index].count));
                     window.index += 1;
                 }
             });
@@ -69,6 +70,10 @@ $(document).ready(function () {
         close: function () {
             $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
         }
+    });
+    
+    $("#gotodashboard").click(function () {
+        window.location.href = "/dashboard";
     });
 
     $("#searchbutton").click(function () {
@@ -129,6 +134,6 @@ $(document).ready(function () {
                 }
             })
         }
-    })
+    });
 });
 

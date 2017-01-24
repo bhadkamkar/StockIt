@@ -170,7 +170,7 @@ app.post('/buy', function (req, res) {
                     if (balance < rate * count) {
                         jsonResponse = {
                             "success": false,
-                            "message": "insufficientBalance"
+                            "message": "Your balance is insufficient to complete the transaction"
                         };
                     }
                     else {
@@ -181,7 +181,6 @@ app.post('/buy', function (req, res) {
                         var queryUpdateBalance = 'UPDATE users SET balance = balance - ' + (rate * count) + ' where username = "' + username + '"';
                         var queryInsertOrUpdateStockheld = 'INSERT into stocksheld values ("' + username + '"' + ',"' + symbol + '","' + name + '",' + count + ',' + (rate * count) + ') ON ' +
                             'DUPLICATE KEY UPDATE count = count+' + count + ', spent = spent+' + (rate * count);
-                        console.log(queryInsertOrUpdateStockheld);
                         connection.query(queryUpdateBalance, function (err, query_res) {
                             if (err) {
                                 console.log(err);

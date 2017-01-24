@@ -57,5 +57,9 @@ body {
 
 .buy-sell-form{
     margin: 0 auto;
-    width:250px;
+    width: 430px;
+}
+
+#buysellinput {
+    width: 240px;
 }
