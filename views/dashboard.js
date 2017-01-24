@@ -129,6 +129,40 @@ $(document).ready(function () {
                 }
             })
         }
-    })
+    });
+    
+    
+    $("#sellbutton").click(function () {
+        var numberShares = $("#buysellinput").val();
+        if (numberShares != undefined) {
+            numberShares = parseInt(numberShares);
+            $.ajax({
+                url: "/sell",
+                method: "post",
+                data: {
+                    shares: numberShares,
+                    rate: window.selectedCompany.rate,
+                    companySymbol: window.selectedCompany.symbol,
+                    companyName: window.selectedCompany.name
+                },
+                success: function (data) {
+                    if(data.success) {
+                        $("#balance").html(data.balance);
+                        $("#success-msg").show();
+                        setTimeout(function () {
+                            $("#success-msg").hide();
+                        }, 5000);
+                    } else {
+                        $("#failure-msg").html(data.message);
+                        $("#failure-msg").show();
+                        setTimeout(function () {
+                            $("#failure-msg").hide();
+                        }, 5000);
+                    }
+                }
+            })
+        }
+    });
+    
 });
 

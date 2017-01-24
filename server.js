@@ -118,39 +118,6 @@ app.get('/getholdings', function (req, res) {
     }
 });
 
-/*
- app.post('/buy', function (req, res) {
- //sess = req.session;
- var username1 = "sid", symbol = "AAPL", rate = 60, count = 2, companyName = "Apple Inc.";
- var querycheck = 'Select count(*) as rowcount from stocksheld where username = "' + username1 + '" AND symbol = "' + symbol + '"', updateflag = false, insertflag = false;
- var queryupdate = 'update stocksheld set count = count + ' + count + ', spent = spent + ' + rate * count + 'where username = "' + username1 + '" AND symbol = "' + symbol + '"';
- var queryinsert = 'insert into stocksheld values ("' + username1 + '","' + symbol + '","' + companyName + '",' + count + ',' + (count * rate) + ')';
- connection.query(querycheck, function (err, rows, fields) {
- if (!err) {
- if (rows[0].rowcount === 1) {
- updateflag = true;
- } else if (rows[0].rowcount === 0) {
- insertflag = true;
- }
- } else {
- console.log(err);
- }
- });
- if (updateflag) {
- connection.query(queryupdate, function (err, rows, fields) {
- if (err) {
- console.log(err);
- }
- });
- } else if(insertflag) {
- connection.query(queryinsert, function (err, rows, fields) {
- if (err) {
- console.log(err);
- }
- });
- }
- });
- */
 
 app.post('/buy', function (req, res) {
     sess = req.session;
@@ -205,6 +172,134 @@ app.post('/buy', function (req, res) {
         console.log('No username')
     }
 });
+
+app.post('/buy', function (req, res) {
+    sess = req.session;
+    if (sess.username) {
+        var username = sess.username;
+        var symbol = req.body.companySymbol;
+        var rate = req.body.rate;
+        var count = req.body.shares;
+        var name = req.body.companyName;
+        var balance;
+        var jsonResponse;
+        var queryGetBalance = 'SELECT balance from users where username = "' + username + '"';
+        connection.query(queryGetBalance,
+            function (err, rows, fields) {
+                if (!err) {
+                    balance = rows[0].balance;
+                    if (balance < rate * count) {
+                        jsonResponse = {
+                            "success": false,
+                            "message": "insufficientBalance"
+                        };
+                    }
+                    else {
+                        jsonResponse = {
+                            "success": true,
+                            "balance": balance - (rate * count)
+                        };
+                        var queryUpdateBalance = 'UPDATE users SET balance = balance - ' + (rate * count) + ' where username = "' + username + '"';
+                        var queryInsertOrUpdateStockheld = 'INSERT into stocksheld values ("' + username + '"' + ',"' + symbol + '","' + name + '",' + count + ',' + (rate * count) + ') ON ' +
+                            'DUPLICATE KEY UPDATE count = count+' + count + ', spent = spent+' + (rate * count);
+                        console.log(queryInsertOrUpdateStockheld);
+                        connection.query(queryUpdateBalance, function (err, query_res) {
+                            if (err) {
+                                console.log(err);
+                            }
+                        });
+                        connection.query(queryInsertOrUpdateStockheld, function (err, query_res) {
+                            if (err) {
+                                console.log(err);
+                            }
+                        });
+                    }
+                    res.jsonp(jsonResponse);
+                }
+                else {
+                    console.log(err);
+                }
+
+            });
+    }
+    else {
+        console.log('No username')
+    }
+});
+
+
+app.post('/sell', function (req, res) {
+    sess = req.session;
+    if (sess.username) {
+        var username = sess.username;
+        var symbol = req.body.companySymbol;
+        var rate = req.body.rate;
+        var count = req.body.shares;
+        var name = req.body.companyName;
+        var balance;
+        var sharesAvailable;
+        var jsonResponse;
+        var queryGetSharesAvailable = 'SELECT count from stocksheld where username = "' + username + '" and symbol = "' + symbol + '"';
+        var queryGetBalance = 'SELECT balance from users where username = "' + username + '"';
+        connection.query(queryGetBalance,
+            function (err, rows, fields) {
+                if (!err) {
+                    balance = rows[0].balance;
+                    connection.query(queryGetSharesAvailable,
+                        function (err, rows, fields) {
+                            if (!err) {
+                                if(rows.length == 0){
+                                    sharesAvailable = 0;
+                                }
+                                else{
+                                    sharesAvailable = rows[0].count;
+                                }
+                                if (sharesAvailable < count) {
+                                    jsonResponse = {
+                                        "success": false,
+                                        "message": "insufficientShares"
+                                    };
+                                }
+                                else {
+                                    
+
+                                    jsonResponse = {
+                                        "success": true,
+                                        "balance": balance + (rate * count)
+                                    };
+                                    var queryUpdateBalance = 'UPDATE users SET balance = balance + ' + (rate * count) + ' where username = "' + username + '"';
+                                    var queryUpdateStockheld = 'UPDATE stocksheld SET count = count - ' + count + ', spent = spent - ' + (rate * count) + ' where username = "' + username + '" and symbol = "' + symbol + '"';
+
+                                    console.log(queryUpdateStockheld);
+                                    connection.query(queryUpdateBalance, function (err, query_res) {
+                                        if (err) {
+                                            console.log(err);
+                                        }
+                                    });
+                                    connection.query(queryUpdateStockheld, function (err, query_res) {
+                                        if (err) {
+                                            console.log(err);
+                                        }
+                                    });
+                                }
+                                res.jsonp(jsonResponse);
+                            }
+                            else {
+                                console.log(err);
+                            }
+
+                        });
+                }
+                else{
+                    console.log(err);
+                }
+        });
+    }
+    else {
+        console.log('No username')
+    }
+});
+
 
 app.get('*.css|*.js', function (req, res) {
     var filename = req.url.replace(/^.*[\\\/]/, '');
