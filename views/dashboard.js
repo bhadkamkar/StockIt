@@ -14,7 +14,7 @@ $(document).ready(function () {
             }
             for (var i = 0; i < data.length; i++) {
                 var tableRow = '<tr>' +
-                    '<td>' + data[i].company_name + '</td><td>' + data[i].count + '</td><td>' + data[i].spent +
+                    '<td>' + data[i].company_name + '</td><td id="count-' + data[i].symbol + '">' + data[i].count + '</td><td id="spent-' + data[i].symbol + '">' + data[i].spent +
                     '</td><td id="rate-' + data[i].symbol + '"></td><td id="profit-' + data[i].symbol + '"></td></tr>';
                 $('#stock-holdings-table tr:last').after(tableRow);
             }
@@ -33,11 +33,11 @@ $(document).ready(function () {
                 dataType: 'jsonp',
                 success: function (stockData) {
                     $("#rate-" + stockData.Symbol).html(stockData.LastPrice);
-                    $("#profit-" + stockData.Symbol).html(window.company_data[window.index].spent - (stockData.LastPrice *
-                        window.company_data[window.index].count));
-                    window.index += 1;
+                    $("#profit-" + stockData.Symbol).html(parseInt($("#spent-" + stockData.Symbol).html()) - (stockData.LastPrice *
+                        parseInt($("#count-" + stockData.Symbol).html())));
                 }
             });
+            window.index += 1;
         }
     }
 

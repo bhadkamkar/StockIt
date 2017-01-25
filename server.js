@@ -269,7 +269,6 @@ app.post('/sell', function (req, res) {
                                     var queryUpdateBalance = 'UPDATE users SET balance = balance + ' + (rate * count) + ' where username = "' + username + '"';
                                     var queryUpdateStockheld = 'UPDATE stocksheld SET count = count - ' + count + ', spent = spent - ' + (rate * count) + ' where username = "' + username + '" and symbol = "' + symbol + '"';
 
-                                    console.log(queryUpdateStockheld);
                                     connection.query(queryUpdateBalance, function (err, query_res) {
                                         if (err) {
                                             console.log(err);
