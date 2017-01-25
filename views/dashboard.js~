@@ -33,8 +33,8 @@ $(document).ready(function () {
                 dataType: 'jsonp',
                 success: function (stockData) {
                     $("#rate-" + stockData.Symbol).html(stockData.LastPrice);
-                    $("#profit-" + stockData.Symbol).html(parseFloat($("#spent-" + stockData.Symbol).html()) - (stockData.LastPrice *
-                        parseFloat($("#count-" + stockData.Symbol).html())));
+                    $("#profit-" + stockData.Symbol).html(parseInt($("#spent-" + stockData.Symbol).html()) - (stockData.LastPrice *
+                        parseInt($("#count-" + stockData.Symbol).html())));
                 }
             });
             window.index += 1;
